@@ -1,22 +1,39 @@
-print("У вас револьвер и одна пуля. Перед вами три двери, что выберете?")
+from ursina import *
+from ursina.prefabs.platformer_controller_2d import PlatformerController2d
 
-game = 0
-while game not in ("1", "2", "3"):
-	if game == 1:
-		print("Здесь на вас вылетел рой смертоносных пчел, которые ужалили вас. А что вы хотели?")
-		print("Game over")
-	elif game == 2:
-		print("Здесь были крокодилы. В любом случае вы погибли")
-		print("Game over")
-	elif game == 3:
-		print ("Здесь были волк и лев, которые не ели 2 года. Как вы поступите? 4 - застрелиться самому, 5 - застрелить льва, 6 - застрелить волка")
-		if game == 4:
-			print("не плохо. game over")
-		elif game == 5:
-			print ("Ведь лев съел волка. Молодец!")
-			print(" The end")
-			break
-		elif game == 6:
-			print("Зачем стрелять в труп?")
-			print("Game Over")
-else:("Такой двери нет. Иди в одну из трёх, идиот")
+# create a window
+app = Ursina()
+
+
+player = PlatformerController2d(
+    position = (0, 0), 
+    collision = True,
+    )
+
+surface = Entity(
+    position = (0, -2),
+    model = "quard",  
+    collider = "box", 
+    scale = (3, 1),
+    )
+
+
+
+def update():
+    player.x += held_keys['d'] * time.dt
+    player.x -= held_keys['a'] * time.dt
+
+    
+camera.add_script(SmoothFollow(target = player, offset = [0.5, -30], speed = 40))
+    
+
+def input(key):
+    if key == 'space':
+        player.y += 1
+        invoke(setattr, player, 'y', player.y-1, delay=.25)
+
+
+
+# start running the game
+app.run()
+
