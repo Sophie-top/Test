@@ -1,24 +1,22 @@
-import my_classes as mc
+"""
+1 - открыть файл и извлечь обертку
+2 - прочитать обертку и сохранить в переменную
+3 - все буквы заменить строчными
+4- убрать из текста "небуквы"
+5 - заменить "ё" на "е"
+"""
 
-def main():
-    global player
-    player = mc.Player("Василий", "Бескровный", 1, 100)
-    player.print_stats()
+import re
+from collections import Counter
 
-    def fight():
+with open (r"source.txt", encoding = "utf-8") as data:
+	text = data.read()
 
-        def create_enemy():
-            global enemy
-            enemy = mc.Enemy(1)
-            enemy.print_stats()
 
-        def battle(player, enemy):
-            while player.HP < 0 or enemy.HP < 0:
-                enemy.change_stats(1)
-                print()
 
-        create_enemy()
-        battle(player, enemy)
-    fight()
+text = text.lower()
+text = re.sub("ё", "e", text)
+edited_text = re.findall(r"[а-яё]+", text)
 
-main()
+result = dict(Counter(edited_text).most_common(20))
+print (result)
